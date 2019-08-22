@@ -1,12 +1,20 @@
-import networkx as nx
-import matplotlib.pyplot as plt
-G = nx.Graph()
+import pygame
+import simpy
+from NetworkGraph import NetworkGraph
 
-G.add_edges_from([(1, 2), (1, 3)])
-G.add_node(1)
-G.add_edge(1, 2)
+env = simpy.RealtimeEnvironment(initial_time=0, factor=0.05, strict=False)
 
-nx.draw(G, with_labels=True, font_weight='bold')
-plt.subplot(122)
-nx.draw_shell(G, nlist=[range(5, 10), range(5)], with_labels=True, font_weight='bold')
-plt.show()
+pygame.init()
+
+size = width, height = 1000, 800
+
+screen	= pygame.display.set_mode(size)
+display = pygame.display
+image	= pygame.image
+event	= pygame.event
+
+graph = NetworkGraph(env, screen, display, image, event)
+
+env.process(graph)
+
+env.run(until= 100)
